@@ -1,0 +1,239 @@
+# Luma Landing Page - Cursor Rules
+
+## Project Overview
+This is a Next.js 14+ landing page project using the App Router, TypeScript, and Tailwind CSS. The project follows a strict modular architecture with a 50-line limit per code file to ensure maintainability and reusability.
+
+## Project Structure
+
+### Directory Organization
+```
+/app              - Next.js App Router pages and API routes
+/components       - Feature-specific components organized by feature folders
+/shared           - Reusable components and utilities
+  /Media          - Media components (Icon, Image)
+  /UI             - Basic UI components (Button, InputField, etc.)
+/hooks            - Custom React hooks
+/lib              - Utility functions and helpers
+/types            - TypeScript type definitions
+/providers        - React context providers
+/public           - Static assets
+```
+
+### Component Organization
+- Each feature component should have its own folder (e.g., `components/Header/`)
+- Each component folder should contain:
+  - `ComponentName.tsx` - Main component file
+  - `index.tsx` - Re-export file for clean imports
+- Related sub-components should be nested in subfolders (e.g., `components/Hero/FormFields.tsx`)
+
+## Code Style Guidelines
+
+### File Size Limit
+- **CRITICAL**: Each code file must not exceed 50 lines
+- If a component exceeds 50 lines, split it into smaller sub-components
+- Extract logic into custom hooks or utility functions
+
+### TypeScript
+- Always use TypeScript with proper type definitions
+- Define interfaces/types in `types/index.ts` for shared types
+- Use type inference where appropriate, but be explicit for function parameters and return types
+- Prefer `interface` over `type` for object shapes
+
+### React Patterns
+- Use functional components with hooks
+- Use `'use client'` directive for client components that use hooks or browser APIs
+- Prefer named exports over default exports for components
+- Keep components focused on a single responsibility
+
+### Import Organization
+- Use absolute imports with `@/` alias (configured in tsconfig.json)
+- Group imports: React/Next.js → third-party → internal components → hooks → lib → types
+- Example:
+  ```typescript
+  'use client'
+  
+  import { useState } from 'react'
+  import Image from 'next/image'
+  import { Button } from '@/shared/UI'
+  import { useFormState } from '@/hooks/useFormState'
+  import { validateEmail } from '@/lib/validation'
+  ```
+
+### Component Structure
+```typescript
+'use client' // Only if needed
+
+import { ... } from '...'
+
+interface ComponentProps {
+  // Props definition
+}
+
+export function ComponentName({ prop1, prop2 }: ComponentProps) {
+  // Hooks
+  // State
+  // Handlers
+  // Render
+  return (
+    // JSX
+  )
+}
+```
+
+## Styling Guidelines
+
+### Tailwind CSS
+- Use Tailwind utility classes exclusively
+- Follow mobile-first responsive design (base styles, then `md:`, `lg:` breakpoints)
+- Use semantic color names from the design system:
+  - `cyan-400`, `cyan-500`, `blue-400`, `blue-500`, `purple-400` for primary accents
+  - `neutral-300`, `neutral-400`, `neutral-500`, `neutral-800` for text and backgrounds
+- Use gradient utilities for text and backgrounds: `bg-gradient-to-r from-cyan-400 to-blue-400`
+- Apply `bg-clip-text text-transparent` for gradient text effects
+
+### Layout Patterns
+- Use flexbox for component layouts: `flex`, `flex-col`, `items-center`, `justify-between`
+- Use CSS Grid for complex layouts: `grid`, `grid-cols-1 lg:grid-cols-2`
+- Use `max-w-*` utilities for content width constraints
+- Use `mx-auto` for centering containers
+- For full-page layouts: `h-screen flex flex-col overflow-hidden`
+
+### Spacing
+- Use consistent spacing scale: `px-4`, `px-6`, `py-6`, `gap-4`, `gap-6`, `gap-12`
+- Use `mb-*`, `mt-*` for vertical spacing between elements
+
+### Animations
+- Use Tailwind animation utilities: `animate-fade-in`, `hover:scale-105`
+- Custom animations defined in `app/globals.css` using `@keyframes`
+- Apply transitions: `transition-colors`, `transition-transform`
+
+## Shared Components
+
+### Location: `/shared`
+- `/shared/UI` - Basic reusable UI components (Button, InputField, TextAreaField, AnimatedBackground)
+- `/shared/Media/Icon` - SVG icon components (XIcon, TelegramIcon, DiscordIcon)
+- `/shared/Media/Image` - Image-related components (currently empty, for future use)
+
+### Shared Component Patterns
+- All shared components should be exported from `index.tsx` files
+- Use consistent prop interfaces with proper TypeScript types
+- Support className merging for customization
+- Follow accessibility best practices (aria-labels, semantic HTML)
+
+## Custom Hooks
+
+### Location: `/hooks`
+- Custom hooks should be prefixed with `use` (e.g., `useFormState`, `useFormSubmission`)
+- Each hook should have a single, clear purpose
+- Extract reusable logic from components into hooks
+- Keep hooks under 50 lines; split complex hooks into smaller ones
+
+## Utility Functions
+
+### Location: `/lib`
+- Pure functions for validation, API calls, data transformation
+- No React-specific code in `/lib` (no hooks, no JSX)
+- Export functions individually for tree-shaking
+- Example: `lib/validation.ts` for form validation, `lib/api.ts` for API utilities
+
+## Next.js App Router Patterns
+
+### Pages
+- Use `app/page.tsx` for the home page
+- Use `app/[route]/page.tsx` for nested routes (e.g., `app/terms/page.tsx`)
+- Server components by default; add `'use client'` only when needed
+
+### API Routes
+- Use `app/api/[route]/route.ts` for API endpoints
+- Handle form submissions, data validation, and external API calls
+- Return proper HTTP status codes and JSON responses
+
+### Layout
+- Use `app/layout.tsx` for root layout with metadata
+- Ensure `html` and `body` have `h-full` for full-height layouts
+
+## Naming Conventions
+
+### Files and Folders
+- Components: PascalCase (e.g., `Hero.tsx`, `Header.tsx`)
+- Hooks: camelCase with `use` prefix (e.g., `useFormState.ts`)
+- Utilities: camelCase (e.g., `validation.ts`, `api.ts`)
+- Folders: PascalCase for component folders (e.g., `Header/`, `Hero/`), lowercase for others (e.g., `hooks/`, `lib/`)
+
+### Variables and Functions
+- Components: PascalCase (e.g., `Hero`, `Button`)
+- Functions: camelCase (e.g., `validateEmail`, `submitForm`)
+- Constants: UPPER_SNAKE_CASE (if needed)
+- Props interfaces: `ComponentNameProps` (e.g., `ButtonProps`)
+
+## Design System
+
+### Colors
+- Primary gradient: `from-cyan-400 via-blue-400 to-purple-400`
+- Button gradient: `from-cyan-500 to-blue-500`
+- Text colors: `text-white`, `text-neutral-300`, `text-neutral-400`, `text-cyan-400/70`
+- Background: Dark theme with `bg-transparent` for overlays
+
+### Typography
+- Headings: `font-extrabold`, `font-bold` with large sizes (`text-5xl md:text-7xl`)
+- Body: `font-light`, `font-medium` with responsive sizes
+- Use `tracking-tight` for headings, `uppercase tracking-wider` for labels
+
+### Layout Constraints
+- Header: Fixed height `h-20` (5rem / 80px)
+- Footer: Fixed height `h-24` (6rem / 96px)
+- Hero: Calculated height `calc(100vh - 5rem - 6rem)` to fill remaining space
+- Main container: `h-screen flex flex-col overflow-hidden` to prevent scrolling
+
+## Best Practices
+
+1. **Modularity**: Keep components small and focused
+2. **Reusability**: Extract common patterns into shared components
+3. **Type Safety**: Use TypeScript strictly; avoid `any` types
+4. **Performance**: Use Next.js Image component for images, optimize with `priority` and `quality`
+5. **Accessibility**: Include proper ARIA labels, semantic HTML, keyboard navigation
+6. **Responsive Design**: Always test mobile-first, then desktop
+7. **Code Splitting**: Use dynamic imports for heavy components if needed
+8. **Error Handling**: Validate inputs, handle API errors gracefully
+
+## Common Patterns
+
+### Form Handling
+- Use custom hooks (`useFormState`, `useFormSubmission`) for form logic
+- Validate on change for real-time feedback
+- Show error messages inline with fields
+- Use shared UI components (`InputField`, `TextAreaField`, `Button`)
+
+### Modal/Dialog Pattern
+- Use conditional rendering with state (`showForm && <Modal />`)
+- Include backdrop and close functionality
+- Use `FormModal` component for consistent styling
+
+### Image Display
+- Use Next.js `Image` component with `fill` and `object-contain` for responsive images
+- Set appropriate `sizes` prop for optimization
+- Use `priority` for above-the-fold images
+- Set `quality={100}` for high-quality images when needed
+
+## What NOT to Do
+
+- ❌ Don't create files over 50 lines
+- ❌ Don't mix server and client code without proper directives
+- ❌ Don't use inline styles except for dynamic values (e.g., `calc()`)
+- ❌ Don't create components in root `/components` - use feature folders
+- ❌ Don't hardcode colors - use Tailwind color system
+- ❌ Don't skip TypeScript types
+- ❌ Don't create duplicate components - check `/shared` first
+- ❌ Don't use default exports for components (except page components)
+
+## When Adding New Features
+
+1. Check if a similar component exists in `/shared`
+2. Create feature folder in `/components` if it's feature-specific
+3. Extract reusable logic into `/hooks` or `/lib`
+4. Update `index.tsx` files for clean imports
+5. Ensure all files stay under 50 lines
+6. Add proper TypeScript types
+7. Follow existing naming and styling patterns
+8. Test responsive design on mobile and desktop
+
